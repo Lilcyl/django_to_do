@@ -1,0 +1,30 @@
+ {% extends "base.html" %}
+ 
+ {% block content%}
+ <form method="POST">
+    {% csrf_token %}
+    {{form.title}}
+    <input type="submit" value = "Add Task"/>
+ </form>
+ <h2>My tasks</h2>
+ <table>
+    <tr><th>Task </th> <th>Status</th> <th>Complete</th>
+        <th>Delete</th>
+ {% for task in tasks%}
+<tr>
+    <td>{{task.title}}</td>
+    <td>{% if task.completed %} Completed {% else %} Pending {% endif %}</td>
+    <td> <form method="POST" action={% url 'complete_task' task.pk%}>
+        {% csrf_token %}
+         <input type="Submit" value = "mark as completed"/>
+    </form></td>
+        <td> <form method="POST" action={% url 'delete_task' task.pk%}>
+            {% csrf_token %}
+            <input type="Submit" value = "delete"/>
+        </form></td>
+    <td>
+</tr>
+{% empty %}
+<p> no task yet , add your first task </p>
+{% endfor%}
+ {% endblock%}
